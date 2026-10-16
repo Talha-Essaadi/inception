@@ -1,0 +1,156 @@
+services:
+
+  mariadb:
+    image: mariadb:inception
+    build:
+      context: ./requirements/mariadb
+    container_name: mariadb
+    restart: always
+    env_file:
+      - .env
+    secrets:
+      - db_password
+      - db_root_password
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    networks:
+      - inception
+
+  wordpress:
+    image: wordpress:inception
+    build:
+      context: ./requirements/wordpress
+    container_name: wordpress
+    restart: always
+    env_file:
+      - .env
+    secrets:
+      - db_password
+      - wp_admin_password
+      - wp_user_password
+    volumes:
+      - wordpress_data:/var/www/html
+    networks:
+      - inception
+    depends_on:
+      - mariadb
+      - redis
+
+  nginx:
+    image: nginx:inception
+    build:
+      context: ./requirements/nginx
+    container_name: nginx
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - wordpress_data:/var/www/html
+    ports:
+      - "443:443"
+    networks:
+      - inception
+    depends_on:
+      - wordpress
+
+  redis:
+    image: redis:inception
+    build:
+      context: ./requirements/bonus/redis
+    container_name: redis
+    restart: always
+    networks:
+      - inception
+
+  static-website:
+    image: static-website:inception
+    build:
+      context: ./requirements/bonus/static-website
+    container_name: static-website
+    restart: always
+    networks:
+      - inception
+
+
+  adminer:
+    image: adminer:inception
+    build:
+      context: ./requirements/bonus/adminer
+    container_name: adminer
+    restart: always
+    networks:
+      - inception
+    depends_on:
+      - mariadb
+
+
+  ftp:
+    image: ftp:inception
+    build:
+      context: ./requirements/bonus/ftp
+    container_name: ftp
+    restart: always
+    secrets:
+      - ftp_password
+    volumes:
+      - wordpress_data:/var/www/html
+    networks:
+      - inception
+    ports:
+      - "21:21"
+      - "21000-21010:21000-21010"
+    depends_on:
+      - wordpress
+
+  n8n:
+    image: n8n:inception
+    build:
+      context: ./requirements/bonus/n8n
+    container_name: n8n
+    restart: always
+    volumes:
+      - n8n_data:/home/n8n/.n8n
+    networks:
+      - inception
+
+
+
+volumes:
+  n8n_data:
+
+
+  mariadb_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/tessaadi/data/mariadb
+
+  wordpress_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/tessaadi/data/wordpress
+
+networks:
+
+  inception:
+    driver: bridge
+
+secrets:
+
+  db_password:
+    file: ../secrets/db_password.txt
+
+  db_root_password:
+    file: ../secrets/db_root_password.txt
+  
+  wp_admin_password:
+    file: ../secrets/wp_admin_password.txt
+
+  wp_user_password:
+    file: ../secrets/wp_user_password.txt
+
+  ftp_password:
+    file: ../secrets/ftp_password.txt
