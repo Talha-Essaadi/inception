@@ -5,8 +5,10 @@ all: create
 	$(COMPOSE) up -d --build
 	
 create:
-	mkdir -p /home/tessaadi/data/mariadb
-	mkdir -p /home/tessaadi/data/wordpress
+	USER=$(shell whoami)
+	mkdir -p /home/$(USER)/data/n8n
+	mkdir -p /home/$(USER)/data/mariadb
+	mkdir -p /home/$(USER)/data/wordpress
 
 
 build: create
@@ -34,14 +36,21 @@ ps:
 	$(COMPOSE) ps
 
 clean:
-	sudo rm -rf /home/tessaadi/data/mariadb/*
-	sudo rm -rf /home/tessaadi/data/wordpress/*
+	sudo rm -rf /home/$(USER)/data/n8n/*
+	sudo rm -rf /home/$(USER)/data/mariadb/*
+	sudo rm -rf /home/$(USER)/data/wordpress/*
 	$(COMPOSE) down --rmi all --volumes
 
-re: create
-	sudo rm -rf /home/tessaadi/data/mariadb/*
-	sudo rm -rf /home/tessaadi/data/wordpress/*
+re:
+	sudo rm -rf /home/$(USER)/data/n8n/*
+	sudo rm -rf /home/$(USER)/data/mariadb/*
+	sudo rm -rf /home/$(USER)/data/wordpress/*
 	$(COMPOSE) down --rmi all --volumes
 	$(COMPOSE) up -d --build
+
+rr:
+	docker compose -f srcs/docker-compose.yml down nginx
+	docker compose -f srcs/docker-compose.yml build nginx
+	docker compose -f srcs/docker-compose.yml up nginx -d
 
 .PHONY: all build up down start stop restart logs ps clean re

@@ -386,7 +386,7 @@ mariadb_data
 The volumes are mapped to:
 
 ```text
-/home/tessaadi/data/
+/home/$USER/data/
 ```
 
 on the host as required by the subject.
@@ -709,7 +709,7 @@ docker volume inspect mariadb_data
 The persistent data is stored under the required host directory:
 
 ```text
-/home/tessaadi/data/
+/home/$USER/data/
 ```
 
 ---

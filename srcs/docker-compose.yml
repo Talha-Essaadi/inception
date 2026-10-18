@@ -47,6 +47,7 @@ services:
     volumes:
       - wordpress_data:/var/www/html
     ports:
+      - "80:80"
       - "443:443"
     networks:
       - inception
@@ -58,15 +59,6 @@ services:
     build:
       context: ./requirements/bonus/redis
     container_name: redis
-    restart: always
-    networks:
-      - inception
-
-  static-website:
-    image: static-website:inception
-    build:
-      context: ./requirements/bonus/static-website
-    container_name: static-website
     restart: always
     networks:
       - inception
@@ -117,21 +109,25 @@ services:
 
 volumes:
   n8n_data:
-
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/${USER}/data/n8n
 
   mariadb_data:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /home/tessaadi/data/mariadb
+      device: /home/${USER}/data/mariadb
 
   wordpress_data:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /home/tessaadi/data/wordpress
+      device: /home/${USER}/data/wordpress
 
 networks:
 

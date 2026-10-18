@@ -1,7 +1,7 @@
 FROM debian:12
 
 RUN apt-get update && \
-    apt-get install -y nginx openssl && \
+    apt-get install -y nginx openssl certbot && \
     rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /etc/nginx/ssl

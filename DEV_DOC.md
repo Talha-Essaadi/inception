@@ -14,12 +14,14 @@ srcs/.env
 
 Example:
 
-```env
-MYSQL_DATABASE=YOUR_DATABASE_NAME
-MYSQL_USER=tessaadi
-MYSQL_HOST=YOUR_HOST
+```sh
+cat > srcs/.env
 
-WP_URL=https://tessaadi.42.fr
+MYSQL_DATABASE=WORDPRESS
+MYSQL_USER=tessaadi
+MYSQL_HOST=mariadb
+
+WP_URL=https://myfragrancesparfum.com/
 WP_TITLE=inception
 WP_ADMIN_USER=tessaadi
 WP_EDITOR_USER=talha
@@ -634,7 +636,7 @@ docker volume inspect <mariadb_volume>
 The project must store persistent data under:
 
 ```text
-/home/tessaadi/data
+/home/$USER/data
 ```
 
 on the host machine.
@@ -1230,7 +1232,7 @@ Persistent WordPress website files
 The host-side persistent storage is located under:
 
 ```text
-/home/tessaadi/data
+/home/$USER/data
 ```
 
 The important distinction is that these are **Docker named volumes**, not ordinary bind mounts configured directly from the project source directory.
@@ -1257,7 +1259,7 @@ secrets/
 Persistent application data is stored through Docker volumes:
 
 ```text
-/home/tessaadi/data/
+/home/$USER/data/
 ```
 
 This separates:
@@ -1741,7 +1743,7 @@ Before submitting the project, verify:
 * [ ] WordPress uses a named Docker volume.
 * [ ] MariaDB uses a named Docker volume.
 * [ ] Bind mounts are not used for the two mandatory persistent volumes.
-* [ ] Persistent data is stored under `/home/tessaadi/data`.
+* [ ] Persistent data is stored under `/home/$USER/data`.
 
 ### Network
 
