@@ -96,12 +96,17 @@ services:
 
   n8n:
     image: n8n:inception
+    environment:
+    - N8N_HOST=n8n.myfragrancesparfum.com
+    - N8N_PROTOCOL=https
+    - N8N_EDITOR_BASE_URL=https://n8n.myfragrancesparfum.com/
+    - WEBHOOK_URL=https://n8n.myfragrancesparfum.com/
     build:
       context: ./requirements/bonus/n8n
     container_name: n8n
     restart: always
     volumes:
-      - n8n_data:/home/n8n/.n8n
+      - n8n_data:/home/node/.n8n
     networks:
       - inception
 
