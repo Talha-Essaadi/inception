@@ -39,7 +39,7 @@ clean:
 # 	sudo rm -rf /home/$(USER)/data/n8n/*
 # 	sudo rm -rf /home/$(USER)/data/mariadb/*
 # 	sudo rm -rf /home/$(USER)/data/wordpress/*
-	$(COMPOSE) down --rmi all --volumes
+# 	$(COMPOSE) down --rmi all --volumes
 
 re:
 # 	sudo rm -rf /home/$(USER)/data/n8n/*
